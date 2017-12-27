@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="../js/jquery-3.2.1.js"></script>
+    <title>Document</title>
+    <script>
+        $(function () {
+            //1.let
+            // let name="hello";
+            // while(true){
+            //     let name="hello world";
+            //     console.log(name);
+            //     break;
+            // }
+            // console.log(name);
+
+            // var a = [];
+            // for (var i = 0; i < 10; i++) {
+            //     a[i] = function () {
+            //         debugger;
+            //         var n=i;
+            //         console.log(n);
+            //     };
+            // }
+            // a[6](); // 10
+            // var a = [];
+            // for (var i = 0; i < 10; i++) {
+            //     write(i);
+            //     function write(i){
+            //         a[i] = function () {
+            //             var n=i;
+            //             console.log(n);
+            //         };
+            //     }
+                
+            // }
+            // a[6](); // 10
+            //2.const
+            // const msg="hello";
+            // msg="hello world";
+            // class Animal{
+            //     constructor(){
+            //         this.type='animal';
+            //     }
+            //     says(say){
+            //         setTimeout(()=> {
+            //             console.log(this.type+' says '+say);
+            //         }, 1000);
+                    
+            //     }
+            // }
+            // class Cat extends Animal{
+            //     constructor(){
+            //         super();
+            //         this.type='cat'
+            //     }
+            // }
+            // let cat=new Cat();
+            // cat.says('hello');
+            //3.bind
+            // var altwrite = document.write;
+            // altwrite.bind(document)("hello");
+            // var a={};
+            // a.talk=function(){
+            //     console.log("talk");
+            // }
+            // var b=a.talk;
+            // b();
+            var basket={
+                count:10,
+                onSale:"hello"
+            };
+            console.log(basket.count);
+            $("#result").append(`
+                There are <b>${basket.count}</b> items
+                in your basket, <em>${basket.onSale}</em>
+                are on sale!
+                `);
+        });
+    </script>
+
+</head>
+
+<body>
+    <div id="result"></div>
+</body>
+
+</html>
