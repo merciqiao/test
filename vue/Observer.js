@@ -12,7 +12,7 @@ function observe(data){
             get:function(){
                 return propertyValue;
             },
-            set:function(newValue){
+            set:function(newPropertyValue){
                 console.log('监听到属性值变化,'+propertyValue+'-->'+newValue);
             }
         });
