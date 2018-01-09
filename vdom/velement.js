@@ -3,7 +3,7 @@
 var VElement=function(tagName,props,children){
     //??
     if(!(this instanceof VElement)){
-        return 
+        return new VElement(tagName,props,children);
     }
     //可以只传递tagName和children参数
     //explain:只传两个参数时,props传的即使children
