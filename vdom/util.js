@@ -37,5 +37,15 @@ util.each=function(array,fn){
         fn(array[i],i);
     }
 }
+util.toArray=function(listLike){
+    if(!listLike){
+        return [];
+    }
+    var list=[];
+    for(var i=0;i<listLike.length;i++){
+        list.push(listLike[i]);
+    }
+    return list;
+}
 
 

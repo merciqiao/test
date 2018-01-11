@@ -12,20 +12,20 @@ function patch(node,patches){
     var walker={
         index:0
     };
-
+    patchWalk(node,walker,patches);
 }
-patch.REPLACE=REPLACE;
+patch.REPLACE=REPLACE;//替换原有节点
 patch.REORDER=REORDER;
-patch.PROPS=PROPS;
-patch.TEXT=Text;
+patch.PROPS=PROPS;//修改属性节点;新增,删除,修改值
+patch.TEXT=TEXT;
 //深度优先遍历dom结构
-function dfsWalk(node,walker,patches){
+function patchWalk(node,walker,patches){
     var currentPatches=patches[walker.index];
     var len=node.childNodes?node.childNodes.length:0;
     for(var i=0;i<len;i++){
         var child=node.childNodes[i];
         walker.index++;
-        dfsWalk(child,walker,patches);
+        patchWalk(child,walker,patches);
     }
     //如果当前节点存在差异
     if(currentPatches){
@@ -68,6 +68,23 @@ function renderChildren(node,moves){
             if(key){
                 maps[key]=node;
             }
+        }
+    });
+    
+    util.each(moves,function(move){
+        var index=move.index;
+        if(move.type===0){
+            if(staticNodeList[index]===node.childNodes[index]){
+                node.removeChild(node.childNodes[index]);
+            }
+            staticNodeList.splice(index,1);
+        }
+        else{
+            var insertNode=maps[move.item.key]?
+            maps[move.item.key]:(typeof move.item==='object')?
+            move.item.render():document.createTextNode(move.item);
+            staticNodeList.splice(index,0,insertNode);
+            node.insertBefore(insertNode,node.childNodes[index]||null);
         }
     });
 }

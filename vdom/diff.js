@@ -1,10 +1,10 @@
 function diff(oldTree,newTree){
     var index=0;
     var patches={};
-    dsfWalk(oldTree,newTree,index,patches);
+    dfsWalk(oldTree,newTree,index,patches);
     return patches;
 }
-function dsfWalk(oldNode,newNode,index,patches){
+function dfsWalk(oldNode,newNode,index,patches){
     var currentPatch=[];
     if(newNode===null){
         //todo依赖listdiff算法进行标记为删除
@@ -54,7 +54,7 @@ function diffProps(oldNode,newNode){
     //找出新增的属性
     for(key in newProps){
         value=newProps[key];
-        if(oldProps.hasOwnProperty(key)){
+        if(!oldProps.hasOwnProperty(key)){
             count++;
             propsPatches[key]=newProps[key];
         }
@@ -66,6 +66,24 @@ function diffProps(oldNode,newNode){
 }
 function diffChildren(oldChildren,newChildren,index,patches,currentPatch){
     var diffs=listDiff(oldChildren,newChildren,'key');
+    newChildren=diffs.children;
+    if(diffs.moves.length){
+        var reorderPatch={
+            type:patch.REORDER,
+            moves:diffs.moves
+        };
+        currentPatch.push(reorderPatch);
+    }
+
+    var leftNode=null;
+    var currentNodeIndex=index;
+    util.each(oldChildren,function(child,i){
+        var newChild=newChildren[i];
+        currentNodeIndex=(leftNode&&leftNode.count)?
+        currentNodeIndex+leftNode.count+1:currentNodeIndex+1;
+        dfsWalk(child,newChild,currentNodeIndex,patches);
+        leftNode=child;
+    });
 
 }
 function listDiff(oldList,newList,key){
@@ -83,6 +101,7 @@ function listDiff(oldList,newList,key){
     var item;
     var itemKey;
     var freeIndex=0;
+    //遍历old子节点集合,取new子节点集合
     while(i < oldList.length){
         item=oldList[i];
         itemKey=getItemKey(item,key);
@@ -101,8 +120,10 @@ function listDiff(oldList,newList,key){
         }
         i++;
     }
+    //取到的对应old子节点集合的new子节点集合
     var simulateList=children.slice(0);
     i=0;
+    //遍历对应的new子节点集合
     while(i < simulateList.length){
         if(simulateList[i]===null){
             remove(i);
